@@ -1,24 +1,26 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, {useState, useEffect} from 'react';
+
 import './App.css';
 
 function App() {
+  const [repos, setRepos] = useState([])
+  useEffect(() => {
+    async function getRepos() {
+      const response = await fetch("https://api.github.com/users/Atif-dhedhi-ai/repos")
+      const data = await response.json();
+      console.log(data)
+      setRepos(data)
+    }  
+    getRepos()
+  }, [])
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <h1> List of My Repositories</h1>
+      <ul>
+        {repos.map((repoObj, ind)=>{
+          return (<li key={ind}> {<a href={repoObj.html_url} target="#blank" >{repoObj.name}</a>} </li>)
+        })}
+     </ul>
     </div>
   );
 }
